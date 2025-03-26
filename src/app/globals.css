@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 31, 41, 55;
+  --background-end-rgb: 17, 24, 39;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
+  min-height: 100vh;
+}
+
+.slide {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.slide-content {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.button {
+  @apply bg-primer-purple text-white px-6 py-3 rounded-lg font-semibold transition-all;
+}
+
+.button:hover {
+  @apply bg-primer-purple-dark;
+}
+
+.button-secondary {
+  @apply bg-primer-gray text-white px-6 py-3 rounded-lg font-semibold transition-all;
+}
+
+.button-secondary:hover {
+  @apply bg-primer-gray-dark;
+}
+
+.option-card {
+  @apply border-2 border-primer-gray-light rounded-lg p-4 cursor-pointer transition-all;
+}
+
+.option-card.selected {
+  @apply border-primer-purple bg-primer-purple/10;
+}
+
+.input-field {
+  @apply bg-primer-gray-dark text-white border-2 border-primer-gray-light rounded-lg p-4 focus:border-primer-purple focus:outline-none;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primer-purple) var(--primer-gray-dark);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(107, 114, 128, 0.2);
+  border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #7c3aed;
+  border-radius: 20px;
+}
