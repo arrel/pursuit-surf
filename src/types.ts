@@ -37,6 +37,16 @@ export interface RubricScore {
   feedback?: string;
 }
 
+export interface QuestionAnswer {
+  question: string;
+  answer: string;
+}
+
+export interface QuestionReason {
+  question: string;
+  reason: string;
+}
+
 export interface ConceptSummaryVersion {
   id: string;
   summary: string;
@@ -44,16 +54,24 @@ export interface ConceptSummaryVersion {
   areasForImprovement?: string;
   suggestions?: string;
   scores: RubricScore[];
-  questions?: {
-    question: string;
-    reason: string;
-  }[];
+  questions?: QuestionReason[];
   approved?: boolean;
+}
+
+export interface ConceptFeedback {
+  strengths: string;
+  areasForImprovement: string;
+  suggestions: string;
+  scores: RubricScore[];
+  questions: QuestionReason[];
 }
 
 export interface ConceptSummaryData {
   versions: ConceptSummaryVersion[];
   currentVersionIndex: number;
+  approvedVersion: ConceptSummaryVersion | null;
+  initialConcept: string | null;
+  initialFeedback: ConceptFeedback | null;
 }
 
 export interface PursuitFormState {

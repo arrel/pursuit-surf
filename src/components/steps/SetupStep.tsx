@@ -2,10 +2,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import { usePursuit } from "@/context/PursuitContext";
 import { GradeLevel, PracticalFocusArea, AcademicFocus } from "@/types";
+import { useRouter } from "next/navigation";
 
 const SetupStep: React.FC = () => {
-  const { state, updateSetup, scrollToNextStep, completeSetup } = usePursuit();
+  const { state, updateSetup, completeSetup } = usePursuit();
   const { gradeLevel, practicalFocusArea, academicFocuses } = state.setup;
+  const router = useRouter();
 
   const gradeLevels: GradeLevel[] = ["K-2nd", "3rd-5th", "6th-8th"];
 
@@ -67,7 +69,8 @@ const SetupStep: React.FC = () => {
   const handleSubmit = () => {
     if (isFormValid()) {
       completeSetup();
-      setTimeout(scrollToNextStep, 1000);
+      // Navigate to the next step using the router
+      router.push('/step/2');
     }
   };
 
@@ -156,7 +159,7 @@ const SetupStep: React.FC = () => {
           onClick={handleSubmit}
           disabled={!isFormValid()}
         >
-          Continue
+          Next
         </motion.button>
       </div>
     </div>

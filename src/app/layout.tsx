@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import PursuitProviderWrapper from '@/components/PursuitProviderWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} custom-scrollbar`}>{children}</body>
+      <body className={`${inter.className} custom-scrollbar`}>
+        <PursuitProviderWrapper>
+          {children}
+        </PursuitProviderWrapper>
+      </body>
     </html>
   )
 }

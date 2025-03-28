@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { usePursuit } from "@/context/PursuitContext";
-import { ConceptSummaryVersion, RubricScore } from "@/types";
+import { ConceptSummaryVersion, RubricScore, QuestionAnswer } from "@/types";
+import { useRouter } from "next/navigation";
 
 const ConceptSummaryStep: React.FC = () => {
   const {
@@ -11,8 +12,8 @@ const ConceptSummaryStep: React.FC = () => {
     approveCurrentVersion,
     editCurrentVersion,
     answerQuestions,
-    scrollToNextStep,
   } = usePursuit();
+  const router = useRouter();
   const { versions, currentVersionIndex } = state.conceptSummary;
   const currentVersion = getCurrentVersion();
   const [answers, setAnswers] = useState<string[]>([]);
@@ -20,6 +21,14 @@ const ConceptSummaryStep: React.FC = () => {
   const [editMode, setEditMode] = useState<"direct" | "instructions">("direct");
   const [editedSummary, setEditedSummary] = useState("");
   const [editInstructions, setEditInstructions] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+
+  // Reset answers when version changes
+  useEffect(() => {
+    setAnswers([]);
+    setShowFeedback(false);
+  }, [currentVersionIndex]);
 
   if (state.isLoading) {
     return (
@@ -61,8 +70,14 @@ const ConceptSummaryStep: React.FC = () => {
           No concept summary available
         </div>
         <p className="text-gray-300">
-          Please go back and submit your idea first
+          Please go back and confirm your concept first
         </p>
+        <button 
+          className="button-secondary mt-4"
+          onClick={() => router.push('/step/3')}
+        >
+          Back to Concept Confirmation
+        </button>
       </div>
     );
   }
@@ -73,16 +88,22 @@ const ConceptSummaryStep: React.FC = () => {
     setAnswers(newAnswers);
   };
 
-  const handleSubmitAnswers = () => {
+  const handleSubmitAnswers = async () => {
     if (answers.length > 0 && answers.every((a) => a.trim())) {
+      setIsSubmitting(true);
+      
       // Convert string answers to the new format with question and reason
       const formattedAnswers =
         currentVersion.questions?.map((q, index) => ({
-          question: q.question,
+          question: typeof q === "string" ? q : q.question,
           answer: answers[index],
         })) || [];
 
-      answerQuestions(formattedAnswers);
+      await answerQuestions(formattedAnswers);
+      
+      // Show feedback that answers were submitted
+      setShowFeedback(true);
+      setIsSubmitting(false);
       setAnswers([]);
     }
   };
@@ -121,7 +142,11 @@ const ConceptSummaryStep: React.FC = () => {
 
   const handleApproveAndContinue = () => {
     approveCurrentVersion();
-    scrollToNextStep();
+    router.push('/step/5');
+  };
+
+  const handlePrevious = () => {
+    router.push('/step/3');
   };
 
   const meetsAllCriteria = () => {
@@ -153,6 +178,10 @@ const ConceptSummaryStep: React.FC = () => {
         )}
       </div>
     );
+  };
+
+  const handleContinueRefining = () => {
+    setShowFeedback(false);
   };
 
   return (
@@ -225,6 +254,23 @@ const ConceptSummaryStep: React.FC = () => {
                 }
               >
                 Save Changes
+              </button>
+            </div>
+          </div>
+        ) : showFeedback ? (
+          <div className="space-y-6">
+            <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
+              <h2 className="text-2xl font-semibold text-green-400 mb-4">
+                Answers Submitted!
+              </h2>
+              <p className="text-gray-300 mb-4">
+                Thank you for your answers! We've updated your pursuit concept based on your feedback.
+              </p>
+              <button
+                className="button mt-2"
+                onClick={handleContinueRefining}
+              >
+                View Updated Concept
               </button>
             </div>
           </div>
@@ -311,16 +357,51 @@ const ConceptSummaryStep: React.FC = () => {
                       ></textarea>
                     </div>
                   ))}
-                  <div className="flex justify-end">
+                  <div className="flex justify-between">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      className="button-secondary mt-4"
+                      onClick={handlePrevious}
+                    >
+                      Previous
+                    </motion.button>
                     <motion.button
                       whileTap={{ scale: 0.95 }}
                       className="button mt-4"
                       onClick={handleSubmitAnswers}
                       disabled={
-                        !answers.length || !answers.every((a) => a.trim())
+                        !answers.length || 
+                        !answers.every((a) => a.trim()) ||
+                        isSubmitting
                       }
                     >
-                      Submit Answers
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Processing...
+                        </span>
+                      ) : (
+                        "Submit Answers"
+                      )}
                     </motion.button>
                   </div>
                 </div>
@@ -340,32 +421,23 @@ const ConceptSummaryStep: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <div className="flex-1 flex flex-col space-y-4">
-                <h3 className="text-xl font-semibold">Want to make changes?</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <button
-                    className="button-secondary"
-                    onClick={() => handleStartEditing("direct")}
-                  >
-                    Edit Directly
-                  </button>
-                  <button
-                    className="button-secondary"
-                    onClick={() => handleStartEditing("instructions")}
-                  >
-                    Give Instructions
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex-1 flex flex-col space-y-4">
                 <h3 className="text-xl font-semibold">Ready to continue?</h3>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  className="button h-full"
-                  onClick={handleApproveAndContinue}
-                >
-                  Approve & Continue
-                </motion.button>
+                <div className="flex gap-2">
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="button-secondary"
+                    onClick={handlePrevious}
+                  >
+                    Previous
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="button flex-grow"
+                    onClick={handleApproveAndContinue}
+                  >
+                    Approve & Continue
+                  </motion.button>
+                </div>
               </div>
             </div>
           </>

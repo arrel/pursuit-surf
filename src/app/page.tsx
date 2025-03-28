@@ -1,34 +1,21 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { PursuitProvider } from '@/context/PursuitContext';
-import Slide from '@/components/Slide';
-import SetupStep from '@/components/steps/SetupStep';
-import IdeaStep from '@/components/steps/IdeaStep';
-import ConceptSummaryStep from '@/components/steps/ConceptSummaryStep';
-import CompletionStep from '@/components/steps/CompletionStep';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to the first step
+    router.push('/step/1');
+  }, [router]);
+
   return (
-    <main className="min-h-screen overflow-x-hidden">
-      <PursuitProvider>
-        <Slide id="step-1" className="bg-gradient-to-b from-primer-gray-dark to-primer-gray">
-          <SetupStep />
-        </Slide>
-        
-        <Slide id="step-2" className="bg-gradient-to-b from-primer-gray to-primer-gray-dark">
-          <IdeaStep />
-        </Slide>
-        
-        <Slide id="step-3" className="bg-gradient-to-b from-primer-gray-dark to-primer-gray">
-          <ConceptSummaryStep />
-        </Slide>
-        
-        <Slide id="step-4" className="bg-gradient-to-b from-primer-gray to-primer-gray-dark">
-          <CompletionStep />
-        </Slide>
-      </PursuitProvider>
+    <main className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <p>Redirecting to Pursuit Planner...</p>
+      </div>
     </main>
   );
 }

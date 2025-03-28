@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { usePursuit } from "@/context/PursuitContext";
+import { useRouter } from "next/navigation";
 
 const IdeaStep: React.FC = () => {
   const { state, updateIdea, submitIdea } = usePursuit();
   const { ideaText } = state.idea;
+  const router = useRouter();
   const [isRecording, setIsRecording] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [recordingStream, setRecordingStream] = useState<MediaStream | null>(
@@ -124,7 +126,14 @@ const IdeaStep: React.FC = () => {
       setIsSubmitting(true);
       await submitIdea();
       setIsSubmitting(false);
+      // Navigate to the concept confirmation step
+      router.push('/step/3');
     }
+  };
+
+  const handlePrevious = () => {
+    // Navigate to the previous step using the router
+    router.push('/step/1');
   };
 
   return (
@@ -176,10 +185,17 @@ const IdeaStep: React.FC = () => {
         </div>
       </div>
 
-      <div className="pt-6 flex justify-center">
+      <div className="pt-6 flex justify-between">
         <motion.button
           whileTap={{ scale: 0.95 }}
-          className={`button w-full max-w-xs ${
+          className="button-secondary"
+          onClick={handlePrevious}
+        >
+          Previous
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          className={`button ${
             !ideaText.trim() || isSubmitting
               ? "opacity-50 cursor-not-allowed"
               : ""
@@ -187,7 +203,7 @@ const IdeaStep: React.FC = () => {
           onClick={handleSubmit}
           disabled={!ideaText.trim() || isSubmitting}
         >
-          {isSubmitting || state.isLoading ? (
+          {isSubmitting ? (
             <span className="flex items-center justify-center">
               <svg
                 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -212,7 +228,7 @@ const IdeaStep: React.FC = () => {
               Analyzing your idea...
             </span>
           ) : (
-            "Submit Idea"
+            "Next"
           )}
         </motion.button>
       </div>
