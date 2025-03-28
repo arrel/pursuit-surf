@@ -138,8 +138,8 @@ function pursuitReducer(
     case "ADD_CONCEPT_VERSION": {
       // Ensure required fields are present
       const newVersionData = {
-        summary: "",  // Default empty string for required field
-        scores: [],   // Default empty array for required field
+        summary: "", // Default empty string for required field
+        scores: [], // Default empty array for required field
         ...action.payload,
       };
 
@@ -391,16 +391,23 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
       // Set a fallback initial concept if the API call fails
       dispatch({
         type: "SET_INITIAL_CONCEPT",
-        payload: `A pursuit focused on ${state.setup.practicalFocusArea} for ${state.setup.gradeLevel} students, incorporating ${state.setup.academicFocuses.join(", ")} and based on the idea: ${state.idea.ideaText}`,
+        payload: `A pursuit focused on ${state.setup.practicalFocusArea} for ${
+          state.setup.gradeLevel
+        } students, incorporating ${state.setup.academicFocuses.join(
+          ", "
+        )} and based on the idea: ${state.idea.ideaText}`,
       });
 
       // Also set fallback feedback data
       dispatch({
         type: "SET_CONCEPT_FEEDBACK",
         payload: {
-          strengths: "- Addresses the specified academic and practical focuses\n- Shows potential for student engagement",
-          areasForImprovement: "- Consider adding more detail about implementation\n- Think about assessment strategies",
-          suggestions: "- Add specific activities or projects\n- Consider how to measure student progress",
+          strengths:
+            "- Addresses the specified academic and practical focuses\n- Shows potential for student engagement",
+          areasForImprovement:
+            "- Consider adding more detail about implementation\n- Think about assessment strategies",
+          suggestions:
+            "- Add specific activities or projects\n- Consider how to measure student progress",
           scores: [
             {
               name: "Clarity",
@@ -412,7 +419,8 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
               name: "Academic Integration",
               score: 2,
               maxScore: 4,
-              feedback: "Academic focuses need to be more explicitly integrated.",
+              feedback:
+                "Academic focuses need to be more explicitly integrated.",
             },
             {
               name: "Practical Application",
@@ -423,12 +431,16 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
           ],
           questions: [
             {
-              question: "How will students demonstrate their learning in this pursuit?",
-              reason: "Clear assessment criteria will help track student progress.",
+              question:
+                "How will students demonstrate their learning in this pursuit?",
+              reason:
+                "Clear assessment criteria will help track student progress.",
             },
             {
-              question: "What specific activities or projects will students complete?",
-              reason: "Concrete activities will help bring the concept to life.",
+              question:
+                "What specific activities or projects will students complete?",
+              reason:
+                "Concrete activities will help bring the concept to life.",
             },
           ],
         },
@@ -486,7 +498,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
             state.conceptSummary.currentVersionIndex
           ].summary,
           "Q&A:",
-          answers.map((a) => `${a.question}: ${a.answer}`),
+          answers.map((a) => `${a.question}: ${a.answer}`).join("\n"),
         ].join("\n");
 
         // Create a prompt with the current summary and the user's answers
@@ -541,7 +553,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
         dispatch({
           type: "ADD_CONCEPT_VERSION",
           payload: {
-            summary: data.summary || currentVersion.summary,
+            summary: data.conceptSummary || currentVersion.summary,
             strengths: data.strengths || currentVersion.strengths,
             areasForImprovement:
               data.areasForImprovement || currentVersion.areasForImprovement,

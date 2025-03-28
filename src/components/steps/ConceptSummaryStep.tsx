@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { usePursuit } from "@/context/PursuitContext";
 import { ConceptSummaryVersion, RubricScore, QuestionAnswer } from "@/types";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from 'react-markdown';
 
 const ConceptSummaryStep: React.FC = () => {
   const {
@@ -72,9 +73,9 @@ const ConceptSummaryStep: React.FC = () => {
         <p className="text-gray-300">
           Please go back and confirm your concept first
         </p>
-        <button 
+        <button
           className="button-secondary mt-4"
-          onClick={() => router.push('/step/3')}
+          onClick={() => router.push("/step/3")}
         >
           Back to Concept Confirmation
         </button>
@@ -91,7 +92,7 @@ const ConceptSummaryStep: React.FC = () => {
   const handleSubmitAnswers = async () => {
     if (answers.length > 0 && answers.every((a) => a.trim())) {
       setIsSubmitting(true);
-      
+
       // Convert string answers to the new format with question and reason
       const formattedAnswers =
         currentVersion.questions?.map((q, index) => ({
@@ -100,7 +101,7 @@ const ConceptSummaryStep: React.FC = () => {
         })) || [];
 
       await answerQuestions(formattedAnswers);
-      
+
       // Show feedback that answers were submitted
       setShowFeedback(true);
       setIsSubmitting(false);
@@ -142,11 +143,11 @@ const ConceptSummaryStep: React.FC = () => {
 
   const handleApproveAndContinue = () => {
     approveCurrentVersion();
-    router.push('/step/5');
+    router.push("/step/5");
   };
 
   const handlePrevious = () => {
-    router.push('/step/3');
+    router.push("/step/3");
   };
 
   const meetsAllCriteria = () => {
@@ -183,6 +184,8 @@ const ConceptSummaryStep: React.FC = () => {
   const handleContinueRefining = () => {
     setShowFeedback(false);
   };
+
+  const allPerfectScores = currentVersion.scores.every((score) => score.score === 4);
 
   return (
     <div className="flex flex-col space-y-8">
@@ -264,12 +267,10 @@ const ConceptSummaryStep: React.FC = () => {
                 Answers Submitted!
               </h2>
               <p className="text-gray-300 mb-4">
-                Thank you for your answers! We've updated your pursuit concept based on your feedback.
+                Thank you for your answers! We've updated your pursuit concept
+                based on your feedback.
               </p>
-              <button
-                className="button mt-2"
-                onClick={handleContinueRefining}
-              >
+              <button className="button mt-2" onClick={handleContinueRefining}>
                 View Updated Concept
               </button>
             </div>
@@ -279,7 +280,9 @@ const ConceptSummaryStep: React.FC = () => {
             <div className="bg-primer-gray-dark p-6 rounded-lg">
               <h2 className="text-2xl font-semibold mb-4">Pursuit Concept</h2>
               <div className="prose prose-invert max-w-none">
-                <p className="whitespace-pre-line">{currentVersion.summary}</p>
+                <ReactMarkdown>
+                  {currentVersion.summary}
+                </ReactMarkdown>
               </div>
             </div>
 
@@ -287,9 +290,9 @@ const ConceptSummaryStep: React.FC = () => {
               <div className="bg-primer-gray-dark p-6 rounded-lg">
                 <h2 className="text-2xl font-semibold mb-4">Strengths</h2>
                 <div className="prose prose-invert max-w-none">
-                  <p className="whitespace-pre-line">
+                  <ReactMarkdown>
                     {currentVersion.strengths}
-                  </p>
+                  </ReactMarkdown>
                 </div>
               </div>
             )}
@@ -300,9 +303,9 @@ const ConceptSummaryStep: React.FC = () => {
                   Areas for Improvement
                 </h2>
                 <div className="prose prose-invert max-w-none">
-                  <p className="whitespace-pre-line">
+                  <ReactMarkdown>
                     {currentVersion.areasForImprovement}
-                  </p>
+                  </ReactMarkdown>
                 </div>
               </div>
             )}
@@ -311,9 +314,9 @@ const ConceptSummaryStep: React.FC = () => {
               <div className="bg-primer-gray-dark p-6 rounded-lg">
                 <h2 className="text-2xl font-semibold mb-4">Suggestions</h2>
                 <div className="prose prose-invert max-w-none">
-                  <p className="whitespace-pre-line">
+                  <ReactMarkdown>
                     {currentVersion.suggestions}
-                  </p>
+                  </ReactMarkdown>
                 </div>
               </div>
             )}
@@ -324,6 +327,37 @@ const ConceptSummaryStep: React.FC = () => {
                 {currentVersion.scores.map(renderScoreItem)}
               </div>
             </div>
+
+            {allPerfectScores ? (
+              <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
+                <h2 className="text-2xl font-semibold text-green-400 mb-4">
+                  Perfect Score!
+                </h2>
+                <p className="text-gray-300">
+                  Your pursuit concept has achieved a perfect score across all criteria.
+                </p>
+              </div>
+            ) : (
+              <div className="bg-primer-gray-dark p-6 rounded-lg">
+                <h2 className="text-2xl font-semibold mb-4">Questions to Answer</h2>
+                <div className="prose prose-invert max-w-none">
+                  <p className="whitespace-pre-line">
+                    Please answer the following questions to further refine your pursuit concept:
+                  </p>
+                  <ul className="list-disc list-inside text-gray-300 space-y-2">
+                    {currentVersion.questions.map((question, index) => (
+                      <li key={index}>{question.question}</li>
+                    ))}
+                  </ul>
+                </div>
+                <button
+                  className="button mt-4"
+                  onClick={handleContinueRefining}
+                >
+                  Continue Refining
+                </button>
+              </div>
+            )}
 
             {currentVersion.questions && currentVersion.questions.length > 0 ? (
               <div className="bg-primer-gray-dark p-6 rounded-lg">
@@ -370,7 +404,7 @@ const ConceptSummaryStep: React.FC = () => {
                       className="button mt-4"
                       onClick={handleSubmitAnswers}
                       disabled={
-                        !answers.length || 
+                        !answers.length ||
                         !answers.every((a) => a.trim()) ||
                         isSubmitting
                       }

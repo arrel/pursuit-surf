@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { usePursuit } from "@/context/PursuitContext";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from 'react-markdown';
 
 const ConceptConfirmationStep: React.FC = () => {
   const { state, submitConceptConfirmation } = usePursuit();
@@ -136,8 +137,10 @@ const ConceptConfirmationStep: React.FC = () => {
               {state.conceptSummary.initialFeedback.strengths && (
                 <div>
                   <h3 className="text-xl font-semibold text-green-300 mb-2">Strengths</h3>
-                  <div className="text-gray-300 whitespace-pre-line">
-                    {state.conceptSummary.initialFeedback.strengths}
+                  <div className="prose prose-invert max-w-none">
+                    <ReactMarkdown>
+                      {state.conceptSummary.initialFeedback.strengths}
+                    </ReactMarkdown>
                   </div>
                 </div>
               )}
@@ -145,8 +148,10 @@ const ConceptConfirmationStep: React.FC = () => {
               {state.conceptSummary.initialFeedback.areasForImprovement && (
                 <div>
                   <h3 className="text-xl font-semibold text-yellow-300 mb-2">Areas for Improvement</h3>
-                  <div className="text-gray-300 whitespace-pre-line">
-                    {state.conceptSummary.initialFeedback.areasForImprovement}
+                  <div className="prose prose-invert max-w-none">
+                    <ReactMarkdown>
+                      {state.conceptSummary.initialFeedback.areasForImprovement}
+                    </ReactMarkdown>
                   </div>
                 </div>
               )}
@@ -154,8 +159,10 @@ const ConceptConfirmationStep: React.FC = () => {
               {state.conceptSummary.initialFeedback.suggestions && (
                 <div>
                   <h3 className="text-xl font-semibold text-blue-300 mb-2">Suggestions</h3>
-                  <div className="text-gray-300 whitespace-pre-line">
-                    {state.conceptSummary.initialFeedback.suggestions}
+                  <div className="prose prose-invert max-w-none">
+                    <ReactMarkdown>
+                      {state.conceptSummary.initialFeedback.suggestions}
+                    </ReactMarkdown>
                   </div>
                 </div>
               )}
