@@ -40,8 +40,14 @@ export interface RubricScore {
 export interface ConceptSummaryVersion {
   id: string;
   summary: string;
+  strengths?: string;
+  areasForImprovement?: string;
+  suggestions?: string;
   scores: RubricScore[];
-  questions?: string[];
+  questions?: {
+    question: string;
+    reason: string;
+  }[];
   approved?: boolean;
 }
 
@@ -60,16 +66,19 @@ export interface PursuitFormState {
 
 // Define the structure of the response we expect from OpenAI
 export interface ConceptResponse {
-  summary: string;
-  strengths: string[];
-  improvements: string[];
+  conceptSummary: string;
+  strengths: string;
+  areasForImprovement: string;
+  suggestions: string;
   scores: {
-    name: string;
+    criterion: string;
     score: number;
-    maxScore: number;
-    feedback?: string;
+    feedback: string;
   }[];
-  questions: string[];
+  questions: {
+    question: string;
+    reason: string;
+  }[];
 }
 
 // Web Speech API TypeScript declarations

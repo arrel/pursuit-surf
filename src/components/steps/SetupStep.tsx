@@ -1,32 +1,32 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { usePursuit } from '@/context/PursuitContext';
-import { GradeLevel, PracticalFocusArea, AcademicFocus } from '@/types';
+import React from "react";
+import { motion } from "framer-motion";
+import { usePursuit } from "@/context/PursuitContext";
+import { GradeLevel, PracticalFocusArea, AcademicFocus } from "@/types";
 
 const SetupStep: React.FC = () => {
-  const { state, updateSetup, scrollToNextStep } = usePursuit();
+  const { state, updateSetup, scrollToNextStep, completeSetup } = usePursuit();
   const { gradeLevel, practicalFocusArea, academicFocuses } = state.setup;
 
-  const gradeLevels: GradeLevel[] = ['K-2nd', '3rd-5th', '6th-8th'];
-  
+  const gradeLevels: GradeLevel[] = ["K-2nd", "3rd-5th", "6th-8th"];
+
   const practicalFocusAreas: PracticalFocusArea[] = [
-    '💬 Communication',
-    '🧠 Critical Thinking',
-    '🏠 Daily Living',
-    '🔄 Feedback',
-    '💵 Personal Finance',
-    '🎤 Public Speaking',
-    '🪴 Self-Care',
-    '✍🏻 Writing',
+    "💬 Communication",
+    "🧠 Critical Thinking",
+    "🏠 Daily Living",
+    "🔄 Feedback",
+    "💵 Personal Finance",
+    "🎤 Public Speaking",
+    "🪴 Self-Care",
+    "✍🏻 Writing",
   ];
-  
+
   const academicFocusOptions: AcademicFocus[] = [
-    '🎭 Arts',
-    '🤖 Computer Science',
-    '📐 Math',
-    '📚 Reading',
-    '🔬 Science',
-    '🏛️ Social Studies',
+    "🎭 Arts",
+    "🤖 Computer Science",
+    "📐 Math",
+    "📚 Reading",
+    "🔬 Science",
+    "🏛️ Social Studies",
   ];
 
   const handleSelectGradeLevel = (level: GradeLevel) => {
@@ -40,7 +40,7 @@ const SetupStep: React.FC = () => {
   const handleToggleAcademicFocus = (focus: AcademicFocus) => {
     const currentFocuses = [...academicFocuses];
     const index = currentFocuses.indexOf(focus);
-    
+
     if (index >= 0) {
       // Remove if already selected
       currentFocuses.splice(index, 1);
@@ -52,7 +52,7 @@ const SetupStep: React.FC = () => {
       currentFocuses.shift();
       currentFocuses.push(focus);
     }
-    
+
     updateSetup({ academicFocuses: currentFocuses });
   };
 
@@ -66,18 +66,21 @@ const SetupStep: React.FC = () => {
 
   const handleSubmit = () => {
     if (isFormValid()) {
-      scrollToNextStep();
+      completeSetup();
+      setTimeout(scrollToNextStep, 1000);
     }
   };
 
   return (
     <div className="flex flex-col space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primer-purple-light mb-6">Primer Pursuit Planner</h1>
+        <h1 className="text-4xl font-bold text-primer-purple-light mb-6">
+          Primer Pursuit Planner
+        </h1>
         <p className="text-xl mb-8">
-          A pursuit is an immersive, interdisciplinary learning experience that connects 
-          academics to relevant and/or real-world applications through challenging, meaningful, 
-          and measurable goals.
+          A pursuit is an immersive, interdisciplinary learning experience that
+          connects academics to relevant and real-world applications through
+          challenging, meaningful, and measurable goals.
         </p>
       </div>
 
@@ -90,7 +93,9 @@ const SetupStep: React.FC = () => {
             {gradeLevels.map((level) => (
               <div
                 key={level}
-                className={`option-card ${level === gradeLevel ? 'selected' : ''}`}
+                className={`option-card ${
+                  level === gradeLevel ? "selected" : ""
+                }`}
                 onClick={() => handleSelectGradeLevel(level)}
               >
                 <div className="text-xl font-medium">{level}</div>
@@ -101,13 +106,17 @@ const SetupStep: React.FC = () => {
 
         {/* Practical Focus Selection */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">2. What is the Practical Focus Area?</h2>
+          <h2 className="text-2xl font-semibold">
+            2. What is the Practical Focus Area?
+          </h2>
           <p className="text-gray-300 mb-4">Choose one option</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {practicalFocusAreas.map((focus) => (
               <div
                 key={focus}
-                className={`option-card ${focus === practicalFocusArea ? 'selected' : ''}`}
+                className={`option-card ${
+                  focus === practicalFocusArea ? "selected" : ""
+                }`}
                 onClick={() => handleSelectPracticalFocus(focus)}
               >
                 <div className="text-xl font-medium">{focus}</div>
@@ -118,13 +127,17 @@ const SetupStep: React.FC = () => {
 
         {/* Academic Focus Selection */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">3. What are the Academic Focuses?</h2>
+          <h2 className="text-2xl font-semibold">
+            3. What are the Academic Focuses?
+          </h2>
           <p className="text-gray-300 mb-4">Choose one or two options</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {academicFocusOptions.map((focus) => (
               <div
                 key={focus}
-                className={`option-card ${isAcademicFocusSelected(focus) ? 'selected' : ''}`}
+                className={`option-card ${
+                  isAcademicFocusSelected(focus) ? "selected" : ""
+                }`}
                 onClick={() => handleToggleAcademicFocus(focus)}
               >
                 <div className="text-xl font-medium">{focus}</div>
@@ -137,7 +150,9 @@ const SetupStep: React.FC = () => {
       <div className="pt-6 flex justify-center">
         <motion.button
           whileTap={{ scale: 0.95 }}
-          className={`button w-full max-w-xs ${!isFormValid() ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`button w-full max-w-xs ${
+            !isFormValid() ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           onClick={handleSubmit}
           disabled={!isFormValid()}
         >
