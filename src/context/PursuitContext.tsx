@@ -15,39 +15,7 @@ import {
   RubricScore,
   QuestionAnswer,
   QuestionReason,
-  ConceptFeedback,
 } from "@/types";
-
-// Stubbed AI responses for testing
-const STUB_AI_SUMMARY = `The "Math for Daily Life" pursuit is designed to connect mathematical concepts to real-world applications for 6th-8th grade students. This interdisciplinary experience focuses on personal finance and daily living skills through practical math applications. Students will learn to create budgets, understand interest rates, calculate discounts, manage time, and measure for cooking and DIY projects. The pursuit culminates with students designing a "Life Skills Math Handbook" that documents their learning and serves as a personal reference guide.`;
-
-const STUB_RUBRIC_SCORES: RubricScore[] = [
-  {
-    name: "Relevance",
-    score: 4,
-    maxScore: 5,
-    feedback: "Good connection to real-world applications.",
-  },
-  {
-    name: "Engagement",
-    score: 3,
-    maxScore: 5,
-    feedback: "Could use more interactive elements.",
-  },
-  { name: "Clarity", score: 5, maxScore: 5 },
-  { name: "Academic Integration", score: 4, maxScore: 5 },
-  {
-    name: "Measurability",
-    score: 3,
-    maxScore: 5,
-    feedback: "Consider more specific success criteria.",
-  },
-];
-
-const STUB_QUESTIONS = [
-  "What specific interactive activities could make this pursuit more engaging?",
-  "How will you measure student success at the end of this pursuit?",
-];
 
 // Initial state
 const initialState: PursuitFormState = {
@@ -65,7 +33,6 @@ const initialState: PursuitFormState = {
     currentVersionIndex: -1,
     approvedVersion: null,
     initialConcept: null,
-    initialFeedback: null,
   },
   isLoading: false,
 };
@@ -79,13 +46,11 @@ type ActionType =
   | { type: "COMPLETE_SETUP" }
   | { type: "UPDATE_IDEA"; payload: string }
   | { type: "SET_INITIAL_CONCEPT"; payload: string }
-  | { type: "SET_CONCEPT_FEEDBACK"; payload: ConceptFeedback }
   | { type: "ADD_CONCEPT_VERSION"; payload: Partial<ConceptSummaryVersion> }
   | { type: "SET_CURRENT_VERSION"; payload: number }
   | { type: "APPROVE_CURRENT_VERSION" }
   | { type: "EDIT_CURRENT_VERSION"; payload: Partial<ConceptSummaryVersion> }
-  | { type: "RESET_FORM" }
-  | { type: "ANSWER_QUESTIONS"; payload: QuestionAnswer[] };
+  | { type: "RESET_FORM" };
 
 // Reducer
 function pursuitReducer(
@@ -138,7 +103,7 @@ function pursuitReducer(
     case "ADD_CONCEPT_VERSION": {
       // Ensure required fields are present
       const newVersionData = {
-        summary: "", // Default empty string for required field
+        conceptSummary: "", // Default empty string for required field
         scores: [], // Default empty array for required field
         ...action.payload,
       };
@@ -181,14 +146,8 @@ function pursuitReducer(
         return state;
       }
 
-      const approvedVersions = state.conceptSummary.versions.map(
-        (version, index) => {
-          if (index === versionIndex) {
-            return { ...version, approved: true };
-          }
-          return version;
-        }
-      );
+      // A version is considered approved when all scores are 4 (max score)
+      const approvedVersions = state.conceptSummary.versions;
 
       return {
         ...state,
@@ -235,57 +194,8 @@ function pursuitReducer(
         },
       };
 
-    case "SET_CONCEPT_FEEDBACK":
-      return {
-        ...state,
-        conceptSummary: {
-          ...state.conceptSummary,
-          initialFeedback: action.payload,
-        },
-      };
-
     case "RESET_FORM":
       return initialState;
-
-    case "ANSWER_QUESTIONS": {
-      const currentVersion =
-        state.conceptSummary.versions[state.conceptSummary.currentVersionIndex];
-      if (!currentVersion) return state;
-
-      const improvedScores = currentVersion.scores.map((score) => ({
-        ...score,
-        score: Math.min(score.score + 1, score.maxScore),
-        feedback:
-          score.score + 1 >= score.maxScore ? undefined : score.feedback,
-      }));
-
-      const newVersion = {
-        id: uuidv4(),
-        summary:
-          currentVersion.summary +
-          "\n\nThe pursuit now includes more interactive elements and clearer success criteria based on student performance in creating their Life Skills Math Handbook.",
-        scores: improvedScores,
-        questions: improvedScores.some((s) => s.score < s.maxScore)
-          ? [
-              {
-                question:
-                  "Any additional thoughts on how to make this pursuit more effective?",
-                reason: "Your insights can help refine the pursuit further.",
-              },
-            ]
-          : [],
-      };
-
-      const newVersions = [...state.conceptSummary.versions, newVersion];
-      return {
-        ...state,
-        conceptSummary: {
-          ...state.conceptSummary,
-          versions: newVersions,
-          currentVersionIndex: newVersions.length - 1,
-        },
-      };
-    }
 
     default:
       return state;
@@ -368,21 +278,10 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
         payload: data.conceptSummary,
       });
 
-      // Also store the full feedback data for later use
+      // Create the first version with the feedback data
       dispatch({
-        type: "SET_CONCEPT_FEEDBACK",
-        payload: {
-          strengths: data.strengths,
-          areasForImprovement: data.areasForImprovement,
-          suggestions: data.suggestions,
-          scores: data.scores.map((score: any) => ({
-            name: score.criterion,
-            score: score.score,
-            maxScore: 4,
-            feedback: score.feedback,
-          })),
-          questions: data.questions,
-        },
+        type: "ADD_CONCEPT_VERSION",
+        payload: data,
       });
 
       // Navigation is handled by the component
@@ -440,9 +339,12 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
           "Concept Summary:",
           state.conceptSummary.versions[
             state.conceptSummary.currentVersionIndex
-          ].summary,
+          ].conceptSummary,
           "Q&A:",
-          answers.map((a) => `${a.question}: ${a.answer}`).join("\n"),
+          answers
+            .filter((a) => a.answer?.trim())
+            .map((a) => `${a.question}: ${a.answer}`)
+            .join("\n"),
         ].join("\n");
 
         // Create a prompt with the current summary and the user's answers
@@ -460,102 +362,13 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
 
         const data = await response.json();
 
-        // Convert the new response format to the expected format for our state
-        const formattedScores = data.scores.map(
-          (scoreItem: {
-            criterion: string;
-            score: number;
-            strengths: string | null;
-            areas_for_improvement: string | null;
-            question: string | null;
-          }) => {
-            return {
-              name: scoreItem.criterion || "Unnamed Criterion",
-              score: scoreItem.score,
-              maxScore: 4, // Based on the rubric in the prompt
-              feedback: scoreItem.areas_for_improvement || "",
-            };
-          }
-        );
-
-        // Extract questions from scores where score < 4 and question exists
-        const questions = data.scores
-          .filter(
-            (item: { score: number; question: string | null }) =>
-              item.score < 4 && item.question
-          )
-          .map((item: { question: string | null }) => item.question)
-          .filter(Boolean) as string[];
-
-        // Determine if we should show more questions based on scores
-        const allPerfectScores = formattedScores.every(
-          (score: { score: number; maxScore: number }) =>
-            score.score === score.maxScore
-        );
-
         // Add the updated concept version
         dispatch({
           type: "ADD_CONCEPT_VERSION",
-          payload: {
-            summary: data.conceptSummary || currentVersion.summary,
-            strengths: data.strengths || currentVersion.strengths,
-            areasForImprovement:
-              data.areasForImprovement || currentVersion.areasForImprovement,
-            suggestions: data.suggestions || currentVersion.suggestions,
-            scores: formattedScores,
-            questions:
-              !allPerfectScores && questions.length > 0
-                ? questions.map((q) => ({
-                    question: q,
-                    reason:
-                      "Answering this will help improve your pursuit concept.",
-                  }))
-                : [],
-          },
+          payload: data,
         });
       } catch (error) {
         console.error("Error updating concept:", error);
-
-        // Fallback to improved stub data if the API call fails
-        const improvedScores = currentVersion.scores.map((score) => ({
-          ...score,
-          score: Math.min(score.score + 1, score.maxScore),
-          feedback:
-            score.score + 1 >= score.maxScore ? undefined : score.feedback,
-        }));
-
-        const allPerfectScores = improvedScores.every(
-          (score: { score: number; maxScore: number }) =>
-            score.score === score.maxScore
-        );
-
-        dispatch({
-          type: "ADD_CONCEPT_VERSION",
-          payload: {
-            summary:
-              currentVersion.summary +
-              "\n\nThe pursuit now includes more interactive elements and clearer success criteria based on your feedback.",
-            strengths: currentVersion.strengths
-              ? currentVersion.strengths +
-                "\n- Incorporates student feedback effectively"
-              : "- Engaging and interactive\n- Incorporates student feedback effectively",
-            areasForImprovement: allPerfectScores
-              ? undefined
-              : currentVersion.areasForImprovement,
-            suggestions: currentVersion.suggestions,
-            scores: improvedScores,
-            questions: !allPerfectScores
-              ? [
-                  {
-                    question:
-                      "Any additional thoughts on how to make this pursuit more effective?",
-                    reason:
-                      "Your insights can help refine the pursuit further.",
-                  },
-                ]
-              : [],
-          },
-        });
       } finally {
         dispatch({ type: "STOP_LOADING" });
       }
@@ -599,20 +412,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
         // Add the new version with the updated structure
         dispatch({
           type: "ADD_CONCEPT_VERSION",
-          payload: {
-            summary: data.conceptSummary,
-            strengths: data.strengths,
-            areasForImprovement: data.areasForImprovement,
-            suggestions: data.suggestions,
-            scores: data.scores.map((score: any) => ({
-              name: score.criterion,
-              score: score.score,
-              maxScore: 4,
-              feedback: score.feedback,
-            })),
-            questions: data.questions,
-            approved: false,
-          },
+          payload: data,
         });
 
         // Navigation is handled by the component

@@ -135,9 +135,10 @@ Once you have generated the feedback, provide a 1-4 score for each rubric criter
                   type: "object",
                   properties: {
                     question: { type: "string" },
+                    criterion: { type: "string" },
                     reason: { type: "string" },
                   },
-                  required: ["question", "reason"],
+                  required: ["question", "criterion", "reason"],
                   additionalProperties: false,
                 },
               },

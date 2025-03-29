@@ -11,11 +11,11 @@ const CompletionStep: React.FC = () => {
 
   const handleStartOver = () => {
     resetForm();
-    router.push('/step/1');
+    router.push("/step/1");
   };
 
   const handleGoBack = () => {
-    router.push('/step/4');
+    router.push("/step/4");
   };
 
   return (
@@ -63,7 +63,8 @@ const CompletionStep: React.FC = () => {
           <h2 className="text-2xl font-semibold mb-4">Pursuit Concept</h2>
           <div className="prose prose-invert max-w-none">
             <p className="whitespace-pre-line">
-              {approvedVersion?.summary || "No concept summary available"}
+              {approvedVersion?.conceptSummary ||
+                "No concept summary available"}
             </p>
           </div>
         </div>
@@ -77,9 +78,7 @@ const CompletionStep: React.FC = () => {
             are some next steps:
           </p>
           <ul className="list-disc list-inside text-gray-300 space-y-2">
-            <li>
-              Create a detailed lesson plan based on your pursuit concept
-            </li>
+            <li>Create a detailed lesson plan based on your pursuit concept</li>
             <li>Gather any necessary materials or resources</li>
             <li>
               Consider how you'll assess student learning throughout the pursuit
