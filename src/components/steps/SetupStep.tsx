@@ -70,28 +70,22 @@ const SetupStep: React.FC = () => {
     if (isFormValid()) {
       completeSetup();
       // Navigate to the next step using the router
-      router.push('/step/2');
+      router.push("/step/2");
     }
   };
 
   return (
     <div className="flex flex-col space-y-8">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-primer-purple-light mb-6">
-          Primer Pursuit Planner
-        </h1>
-        <p className="text-xl mb-8">
-          A pursuit is an immersive, interdisciplinary learning experience that
-          connects academics to relevant and real-world applications through
-          challenging, meaningful, and measurable goals.
-        </p>
-      </div>
+      <h1 className="text-4xl font-bold text-primer-purple-light mb-6">
+        Tell us a bit about your pursuit
+      </h1>
 
       <div className="space-y-8">
         {/* Grade Level Selection */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">1. Which grade levels?</h2>
-          <p className="text-gray-300 mb-4">Choose one option</p>
+          <h2 className="text-2xl font-semibold">
+            1. What grade band is best suited for this pursuit?
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {gradeLevels.map((level) => (
               <div
@@ -110,9 +104,8 @@ const SetupStep: React.FC = () => {
         {/* Practical Focus Selection */}
         <div className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            2. What is the Practical Focus Area?
+            2. Select the primary practical skill students will develop.
           </h2>
-          <p className="text-gray-300 mb-4">Choose one option</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {practicalFocusAreas.map((focus) => (
               <div
@@ -131,9 +124,8 @@ const SetupStep: React.FC = () => {
         {/* Academic Focus Selection */}
         <div className="space-y-4">
           <h2 className="text-2xl font-semibold">
-            3. What are the Academic Focuses?
+            3. Choose 1-2 core academic disciplines.
           </h2>
-          <p className="text-gray-300 mb-4">Choose one or two options</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {academicFocusOptions.map((focus) => (
               <div

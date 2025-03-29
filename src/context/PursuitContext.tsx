@@ -387,64 +387,8 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
 
       // Navigation is handled by the component
     } catch (error) {
+      // TODO: Handle error
       console.error("Error submitting idea:", error);
-      // Set a fallback initial concept if the API call fails
-      dispatch({
-        type: "SET_INITIAL_CONCEPT",
-        payload: `A pursuit focused on ${state.setup.practicalFocusArea} for ${
-          state.setup.gradeLevel
-        } students, incorporating ${state.setup.academicFocuses.join(
-          ", "
-        )} and based on the idea: ${state.idea.ideaText}`,
-      });
-
-      // Also set fallback feedback data
-      dispatch({
-        type: "SET_CONCEPT_FEEDBACK",
-        payload: {
-          strengths:
-            "- Addresses the specified academic and practical focuses\n- Shows potential for student engagement",
-          areasForImprovement:
-            "- Consider adding more detail about implementation\n- Think about assessment strategies",
-          suggestions:
-            "- Add specific activities or projects\n- Consider how to measure student progress",
-          scores: [
-            {
-              name: "Clarity",
-              score: 2,
-              maxScore: 4,
-              feedback: "The concept needs more specific details.",
-            },
-            {
-              name: "Academic Integration",
-              score: 2,
-              maxScore: 4,
-              feedback:
-                "Academic focuses need to be more explicitly integrated.",
-            },
-            {
-              name: "Practical Application",
-              score: 2,
-              maxScore: 4,
-              feedback: "Consider adding more real-world connections.",
-            },
-          ],
-          questions: [
-            {
-              question:
-                "How will students demonstrate their learning in this pursuit?",
-              reason:
-                "Clear assessment criteria will help track student progress.",
-            },
-            {
-              question:
-                "What specific activities or projects will students complete?",
-              reason:
-                "Concrete activities will help bring the concept to life.",
-            },
-          ],
-        },
-      });
     } finally {
       dispatch({ type: "STOP_LOADING" });
     }
@@ -674,57 +618,6 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
         // Navigation is handled by the component
       } catch (error) {
         console.error("Error submitting concept confirmation:", error);
-        // Fallback to a basic version if API fails
-        dispatch({
-          type: "ADD_CONCEPT_VERSION",
-          payload: {
-            summary: summary,
-            strengths:
-              "- Clearly defined concept\n- Addresses the specified academic and practical focuses",
-            areasForImprovement:
-              "- Consider adding more detail about implementation\n- Think about assessment strategies",
-            suggestions:
-              "- Add specific activities or projects\n- Consider how to measure student progress",
-            scores: [
-              {
-                name: "Clarity",
-                score: 3,
-                maxScore: 4,
-                feedback:
-                  "The concept is clear but could use more specific details.",
-              },
-              {
-                name: "Academic Integration",
-                score: 3,
-                maxScore: 4,
-                feedback:
-                  "Good integration of academic focuses, but could be more explicit.",
-              },
-              {
-                name: "Practical Application",
-                score: 3,
-                maxScore: 4,
-                feedback:
-                  "Strong practical focus, but consider real-world connections.",
-              },
-            ],
-            questions: [
-              {
-                question:
-                  "How will you assess student learning throughout this pursuit?",
-                reason:
-                  "Clear assessment criteria will help track student progress.",
-              },
-              {
-                question:
-                  "What specific activities or projects will students complete?",
-                reason:
-                  "Concrete activities will help bring the concept to life.",
-              },
-            ],
-            approved: false,
-          },
-        });
       } finally {
         dispatch({ type: "STOP_LOADING" });
       }

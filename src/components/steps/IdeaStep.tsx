@@ -127,30 +127,25 @@ const IdeaStep: React.FC = () => {
       await submitIdea();
       setIsSubmitting(false);
       // Navigate to the concept confirmation step
-      router.push('/step/3');
+      router.push("/step/3");
     }
   };
 
   const handlePrevious = () => {
     // Navigate to the previous step using the router
-    router.push('/step/1');
+    router.push("/step/1");
   };
 
   return (
     <div className="flex flex-col space-y-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-primer-purple-light mb-6">
-          The Idea
-        </h1>
-        <p className="text-xl mb-4">
-          Time for a brain dump! Share your pursuit idea in as much detail as
-          you can.
-        </p>
-        <p className="text-lg text-gray-300 mb-8">
-          Don't worry about organization or structure - just get all your
-          thoughts out there. We'll help you refine it in the next step.
-        </p>
-      </div>
+      <h1 className="text-4xl font-bold text-primer-purple-light">
+        Share your pursuit idea
+      </h1>
+      <p className="text-xl mb-4">
+        Use this space to describe your entire pursuit concept in your own
+        words. Don't worry about organization or structure - just get all your
+        thoughts out there. We'll help you refine it in the next step.
+      </p>
 
       <div className="space-y-4">
         <div className="flex justify-between items-center">
@@ -173,7 +168,7 @@ const IdeaStep: React.FC = () => {
         <textarea
           id="idea-input"
           className="input-field w-full h-64 resize-none"
-          placeholder="Describe your pursuit idea here... What are the goals? What will students do? What makes it engaging? How will it connect to real-world applications?"
+          placeholder="What are the goals? What will students do? What makes it engaging? How will it connect to real-world applications?"
           value={ideaText}
           onChange={handleTextChange}
           disabled={isSubmitting}

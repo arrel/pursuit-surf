@@ -3,6 +3,7 @@
 import React from 'react';
 import { useParams } from 'next/navigation';
 import { usePursuit } from '@/context/PursuitContext';
+import IntroStep from '@/components/steps/IntroStep';
 import SetupStep from '@/components/steps/SetupStep';
 import IdeaStep from '@/components/steps/IdeaStep';
 import ConceptConfirmationStep from '@/components/steps/ConceptConfirmationStep';
@@ -17,6 +18,8 @@ export default function StepPage() {
   // Render the appropriate step component
   const renderStep = () => {
     switch (stepId) {
+      case 0:
+        return <IntroStep />;
       case 1:
         return <SetupStep />;
       case 2:
@@ -28,33 +31,38 @@ export default function StepPage() {
       case 5:
         return <CompletionStep />;
       default:
-        return <SetupStep />;
+        return <IntroStep />;
     }
   };
+
+  // Don't show step indicators for the intro step
+  const showStepIndicators = stepId !== 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primer-gray-dark to-primer-gray">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex space-x-2">
-                {[1, 2, 3, 4, 5].map((step) => (
-                  <div
-                    key={step}
-                    className={`w-3 h-3 rounded-full ${
-                      step <= state.currentStep
-                        ? "bg-primer-purple"
-                        : "bg-primer-gray-dark"
-                    }`}
-                  ></div>
-                ))}
-              </div>
-              <div className="text-sm text-gray-400">
-                Step {stepId} of 5
+          {showStepIndicators && (
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex space-x-2">
+                  {[1, 2, 3, 4, 5].map((step) => (
+                    <div
+                      key={step}
+                      className={`w-3 h-3 rounded-full ${
+                        step <= state.currentStep
+                          ? "bg-primer-purple"
+                          : "bg-primer-gray-dark"
+                      }`}
+                    ></div>
+                  ))}
+                </div>
+                <div className="text-sm text-gray-400">
+                  Step {stepId} of 5
+                </div>
               </div>
             </div>
-          </div>
+          )}
           {renderStep()}
         </div>
       </div>

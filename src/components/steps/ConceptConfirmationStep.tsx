@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { usePursuit } from "@/context/PursuitContext";
 import { useRouter } from "next/navigation";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
 
 const ConceptConfirmationStep: React.FC = () => {
   const { state, submitConceptConfirmation } = usePursuit();
@@ -20,28 +20,24 @@ const ConceptConfirmationStep: React.FC = () => {
   }, [state.conceptSummary.initialConcept]);
 
   const handlePrevious = () => {
-    router.push('/step/2');
+    router.push("/step/2");
   };
 
   const handleSubmit = async () => {
     if (conceptSummary.trim()) {
       // Check if the user has edited the concept
-      const hasEdited = conceptSummary.trim() !== originalSummary.current.trim();
-      
+      const hasEdited =
+        conceptSummary.trim() !== originalSummary.current.trim();
+
       if (hasEdited) {
         // Only submit if the user has made changes
         setIsSubmitting(true);
         await submitConceptConfirmation(conceptSummary);
         setIsSubmitting(false);
-      } else if (state.conceptSummary.initialFeedback) {
-        // If not edited and we have initial feedback, use that to create the first version
-        setIsSubmitting(true);
-        await submitConceptConfirmation(conceptSummary);
-        setIsSubmitting(false);
       }
-      
+
       // Proceed to the next step regardless
-      router.push('/step/4');
+      router.push("/step/4");
     }
   };
 
@@ -87,9 +83,9 @@ const ConceptConfirmationStep: React.FC = () => {
         <p className="text-gray-300">
           Please go back and submit your idea first
         </p>
-        <button 
+        <button
           className="button-secondary mt-4"
-          onClick={() => router.push('/step/2')}
+          onClick={() => router.push("/step/2")}
         >
           Back to Idea
         </button>
@@ -99,139 +95,68 @@ const ConceptConfirmationStep: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-primer-purple-light mb-6">
-          Confirm Your Pursuit Concept
-        </h1>
-        <p className="text-xl mb-4">
-          We've taken your idea and shaped it into a concise summary of your pursuit.
-        </p>
-        <p className="text-lg text-gray-300 mb-8">
-          Please review the summary below and make any necessary adjustments to ensure it accurately reflects your vision.
-        </p>
-      </div>
+      <h1 className="text-3xl font-bold text-primer-purple-light">
+        Pursuit Synopsis
+      </h1>
+      <p className="text-xl mb-4">
+        We've taken your idea and shaped it into a concise summary of your
+        pursuit. Please review and make any necessary adjustments to ensure it
+        accurately reflects your vision.
+      </p>
 
-      <div className="space-y-6">
-        <div className="bg-primer-gray-dark p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Pursuit Concept</h2>
-          <p className="text-gray-300 mb-4">
-            You can edit this summary directly in the text box below:
-          </p>
-          <textarea
-            className="input-field w-full h-64 resize-none"
-            value={conceptSummary}
-            onChange={(e) => setConceptSummary(e.target.value)}
-            placeholder="Your pursuit concept summary..."
-          ></textarea>
-        </div>
+      <textarea
+        className="input-field w-full h-64 resize-none"
+        value={conceptSummary}
+        onChange={(e) => setConceptSummary(e.target.value)}
+        placeholder="Your pursuit concept summary..."
+      ></textarea>
 
-        {state.conceptSummary.initialFeedback && (
-          <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold text-green-400 mb-4">
-              Initial Feedback
-            </h2>
-            <p className="text-gray-300 mb-4">
-              Here's what our system thinks about your concept:
-            </p>
-            <div className="space-y-4">
-              {state.conceptSummary.initialFeedback.strengths && (
-                <div>
-                  <h3 className="text-xl font-semibold text-green-300 mb-2">Strengths</h3>
-                  <div className="prose prose-invert max-w-none">
-                    <ReactMarkdown>
-                      {state.conceptSummary.initialFeedback.strengths}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              )}
-              
-              {state.conceptSummary.initialFeedback.areasForImprovement && (
-                <div>
-                  <h3 className="text-xl font-semibold text-yellow-300 mb-2">Areas for Improvement</h3>
-                  <div className="prose prose-invert max-w-none">
-                    <ReactMarkdown>
-                      {state.conceptSummary.initialFeedback.areasForImprovement}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              )}
-              
-              {state.conceptSummary.initialFeedback.suggestions && (
-                <div>
-                  <h3 className="text-xl font-semibold text-blue-300 mb-2">Suggestions</h3>
-                  <div className="prose prose-invert max-w-none">
-                    <ReactMarkdown>
-                      {state.conceptSummary.initialFeedback.suggestions}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold text-green-400 mb-4">
-            What happens next?
-          </h2>
-          <p className="text-gray-300 mb-4">
-            After you confirm this concept summary, we'll provide:
-          </p>
-          <ul className="list-disc list-inside text-gray-300 space-y-2">
-            <li>Detailed feedback on your pursuit concept</li>
-            <li>Scores based on educational criteria</li>
-            <li>Suggestions for improvement</li>
-            <li>Questions to help refine your concept further</li>
-          </ul>
-        </div>
-
-        <div className="pt-6 flex justify-between">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            className="button-secondary"
-            onClick={handlePrevious}
-          >
-            Previous
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            className={`button ${
-              !conceptSummary.trim() || isSubmitting
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-            onClick={handleSubmit}
-            disabled={!conceptSummary.trim() || isSubmitting}
-          >
-            {isSubmitting ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Processing...
-              </span>
-            ) : (
-              "Confirm & Continue"
-            )}
-          </motion.button>
-        </div>
+      <div className="flex justify-between">
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          className="button-secondary"
+          onClick={handlePrevious}
+        >
+          Previous
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          className={`button ${
+            !conceptSummary.trim() || isSubmitting
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`}
+          onClick={handleSubmit}
+          disabled={!conceptSummary.trim() || isSubmitting}
+        >
+          {isSubmitting ? (
+            <span className="flex items-center justify-center">
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Processing...
+            </span>
+          ) : (
+            "Analyze my idea"
+          )}
+        </motion.button>
       </div>
     </div>
   );

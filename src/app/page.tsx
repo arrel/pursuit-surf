@@ -7,8 +7,8 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to the first step
-    router.push('/step/1');
+    // Redirect to the intro step
+    router.push('/step/0');
   }, [router]);
 
   return (
