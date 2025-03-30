@@ -76,14 +76,12 @@ const SetupStep: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <h1 className="text-4xl font-bold text-primer-purple-light mb-6">
-        Tell us a bit about your pursuit
-      </h1>
+      <h1 className="text-4xl mb-6">Tell us a bit about your pursuit</h1>
 
-      <div className="space-y-8">
+      <div className="space-y-10">
         {/* Grade Level Selection */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-xl">
             1. What grade band is best suited for this pursuit?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -103,7 +101,7 @@ const SetupStep: React.FC = () => {
 
         {/* Practical Focus Selection */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-xl">
             2. Select the primary practical skill students will develop.
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -123,7 +121,7 @@ const SetupStep: React.FC = () => {
 
         {/* Academic Focus Selection */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-xl font-semibold">
             3. Choose 1-2 core academic disciplines.
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

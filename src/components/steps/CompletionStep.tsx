@@ -20,10 +20,8 @@ const CompletionStep: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-primer-purple-light mb-6">
-          Pursuit Complete!
-        </h1>
+      <div>
+        <h1 className="text-4xl mb-6">Pursuit Complete!</h1>
         <p className="text-xl mb-8">
           Your pursuit has been created successfully. Here's a summary of your
           pursuit:
@@ -31,36 +29,28 @@ const CompletionStep: React.FC = () => {
       </div>
 
       <div className="space-y-6">
-        <div className="bg-primer-gray-dark p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Pursuit Details</h2>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-medium text-primer-purple-light">
-                Grade Level
-              </h3>
-              <p>{gradeLevel}</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-medium text-primer-purple-light">
-                Practical Focus Area
-              </h3>
-              <p>{practicalFocusArea}</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-medium text-primer-purple-light">
-                Academic Focuses
-              </h3>
-              <ul className="list-disc list-inside">
-                {academicFocuses.map((focus) => (
-                  <li key={focus}>{focus}</li>
-                ))}
-              </ul>
-            </div>
+        <h2 className="text-2xl mb-4">Pursuit Details</h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg font-medium">Grade Level</h3>
+            <p>{gradeLevel}</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-medium">Practical Focus Area</h3>
+            <p>{practicalFocusArea}</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-medium">Academic Focuses</h3>
+            <ul className="list-disc list-inside">
+              {academicFocuses.map((focus) => (
+                <li key={focus}>{focus}</li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="bg-primer-gray-dark p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Pursuit Concept</h2>
+        <div>
+          <h2 className="text-2xl mb-4">Pursuit Concept</h2>
           <div className="prose prose-invert max-w-none">
             <p className="whitespace-pre-line">
               {approvedVersion?.conceptSummary ||
@@ -69,15 +59,13 @@ const CompletionStep: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold text-green-400 mb-4">
-            What's Next?
-          </h2>
-          <p className="text-gray-300 mb-4">
+        <div className="bg-green-200/20 border border-green-500 p-6 rounded-lg">
+          <h2 className="text-2xl text-green-500 mb-4">What's Next?</h2>
+          <p className="mb-4">
             Your pursuit is now ready to be implemented in your classroom! Here
             are some next steps:
           </p>
-          <ul className="list-disc list-inside text-gray-300 space-y-2">
+          <ul className="list-disc list-inside space-y-2">
             <li>Create a detailed lesson plan based on your pursuit concept</li>
             <li>Gather any necessary materials or resources</li>
             <li>

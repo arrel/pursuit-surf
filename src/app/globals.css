@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 31, 41, 55;
-  --background-end-rgb: 17, 24, 39;
+  --foreground-rgb: 28, 33, 46;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 248, 250, 252;
 }
 
 body {
@@ -36,7 +36,7 @@ body {
 }
 
 .button {
-  @apply bg-primer-purple text-white px-6 py-3 rounded-lg font-semibold transition-all;
+  @apply bg-primer-purple text-white px-6 py-3 rounded-full font-semibold transition-all;
 }
 
 .button:hover {
@@ -44,28 +44,32 @@ body {
 }
 
 .button-secondary {
-  @apply bg-primer-gray text-white px-6 py-3 rounded-lg font-semibold transition-all;
+  @apply bg-primer-purple-light border border-primer-purple-light text-primer-purple px-6 py-3 rounded-full font-semibold transition-all;
 }
 
 .button-secondary:hover {
-  @apply bg-primer-gray-dark;
+  @apply border-primer-purple;
 }
 
 .option-card {
-  @apply border-2 border-primer-gray-light rounded-lg p-4 cursor-pointer transition-all;
+  @apply rounded-full border text-primer-gray-dark border-primer-gray bg-primer-gray-light px-4 py-2 cursor-pointer transition-all;
+}
+
+.option-card:hover {
+  @apply border-primer-gray-dark;
 }
 
 .option-card.selected {
-  @apply border-primer-purple bg-primer-purple/10;
+  @apply text-primer-purple border-primer-purple bg-primer-purple-light;
 }
 
 .input-field {
-  @apply bg-primer-gray-dark text-white border-2 border-primer-gray-light rounded-lg p-4 focus:border-primer-purple focus:outline-none;
+  @apply bg-white text-gray-800 border border-primer-black-light rounded-lg p-4 focus:border-primer-purple focus:outline-none;
 }
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--primer-purple) var(--primer-gray-dark);
+  scrollbar-color: var(--primer-purple) var(--primer-black-light);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -73,7 +77,7 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(107, 114, 128, 0.2);
+  background: rgba(229, 231, 235, 0.5);
   border-radius: 20px;
 }
 

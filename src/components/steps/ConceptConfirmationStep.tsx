@@ -95,9 +95,7 @@ const ConceptConfirmationStep: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <h1 className="text-3xl font-bold text-primer-purple-light">
-        Pursuit Synopsis
-      </h1>
+      <h1 className="text-3xl">Pursuit Synopsis</h1>
       <p className="text-xl mb-4">
         We've taken your idea and shaped it into a concise summary of your
         pursuit. Please review and make any necessary adjustments to ensure it

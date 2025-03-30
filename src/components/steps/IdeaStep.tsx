@@ -138,9 +138,7 @@ const IdeaStep: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <h1 className="text-4xl font-bold text-primer-purple-light">
-        Share your pursuit idea
-      </h1>
+      <h1 className="text-4xl">Share your pursuit idea</h1>
       <p className="text-xl mb-4">
         Use this space to describe your entire pursuit concept in your own
         words. Don't worry about organization or structure - just get all your
@@ -149,7 +147,7 @@ const IdeaStep: React.FC = () => {
 
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <label htmlFor="idea-input" className="text-xl font-semibold">
+          <label htmlFor="idea-input" className="text-xl">
             Your Pursuit Idea
           </label>
           <motion.button
@@ -174,7 +172,7 @@ const IdeaStep: React.FC = () => {
           disabled={isSubmitting}
         ></textarea>
 
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-primer-gray-dark">
           Tip: The more details you provide, the better we can help you refine
           your idea!
         </div>

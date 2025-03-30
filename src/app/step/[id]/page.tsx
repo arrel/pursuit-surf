@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useParams } from 'next/navigation';
-import { usePursuit } from '@/context/PursuitContext';
-import IntroStep from '@/components/steps/IntroStep';
-import SetupStep from '@/components/steps/SetupStep';
-import IdeaStep from '@/components/steps/IdeaStep';
-import ConceptConfirmationStep from '@/components/steps/ConceptConfirmationStep';
-import ConceptSummaryStep from '@/components/steps/ConceptSummaryStep';
-import CompletionStep from '@/components/steps/CompletionStep';
+import React from "react";
+import { useParams } from "next/navigation";
+import { usePursuit } from "@/context/PursuitContext";
+import IntroStep from "@/components/steps/IntroStep";
+import SetupStep from "@/components/steps/SetupStep";
+import IdeaStep from "@/components/steps/IdeaStep";
+import ConceptConfirmationStep from "@/components/steps/ConceptConfirmationStep";
+import ConceptSummaryStep from "@/components/steps/ConceptSummaryStep";
+import CompletionStep from "@/components/steps/CompletionStep";
 
 export default function StepPage() {
   const params = useParams();
@@ -39,7 +39,7 @@ export default function StepPage() {
   const showStepIndicators = stepId !== 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primer-gray-dark to-primer-gray">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {showStepIndicators && (
@@ -52,14 +52,12 @@ export default function StepPage() {
                       className={`w-3 h-3 rounded-full ${
                         step <= state.currentStep
                           ? "bg-primer-purple"
-                          : "bg-primer-gray-dark"
+                          : "bg-primer-black-dark"
                       }`}
                     ></div>
                   ))}
                 </div>
-                <div className="text-sm text-gray-400">
-                  Step {stepId} of 5
-                </div>
+                <div className="text-sm text-gray-400">Step {stepId} of 5</div>
               </div>
             </div>
           )}
