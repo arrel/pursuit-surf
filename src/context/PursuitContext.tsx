@@ -16,6 +16,7 @@ import {
   QuestionAnswer,
   QuestionReason,
 } from "@/types";
+import { usePrompt } from "./PromptContext";
 
 // Initial state
 const initialState: PursuitFormState = {
@@ -224,6 +225,7 @@ const PursuitContext = createContext<PursuitContextType | undefined>(undefined);
 // Provider component
 export function PursuitProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(pursuitReducer, initialState);
+  const { prompt } = usePrompt();
 
   const setCurrentStep = useCallback((step: number) => {
     if (step >= 1 && step <= 4) {
@@ -263,7 +265,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idea }),
+        body: JSON.stringify({ idea, prompt }),
       });
 
       if (!response.ok) {
@@ -296,6 +298,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
     state.setup.practicalFocusArea,
     state.setup.academicFocuses,
     state.idea.ideaText,
+    prompt,
   ]);
 
   const getCurrentVersion = useCallback((): ConceptSummaryVersion | null => {
@@ -353,7 +356,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ idea }),
+          body: JSON.stringify({ idea, prompt }),
         });
 
         if (!response.ok) {
@@ -380,6 +383,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
       state.setup.academicFocuses,
       state.conceptSummary.versions,
       state.conceptSummary.currentVersionIndex,
+      prompt,
     ]
   );
 
@@ -400,7 +404,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
         const response = await fetch("/api/generate-concept", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ idea }),
+          body: JSON.stringify({ idea, prompt }),
         });
 
         if (!response.ok) {
@@ -426,6 +430,7 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
       state.setup.gradeLevel,
       state.setup.practicalFocusArea,
       state.setup.academicFocuses,
+      prompt,
     ]
   );
 

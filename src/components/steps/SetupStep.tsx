@@ -93,7 +93,7 @@ const SetupStep: React.FC = () => {
                 }`}
                 onClick={() => handleSelectGradeLevel(level)}
               >
-                <div className="text-xl font-medium">{level}</div>
+                {level}
               </div>
             ))}
           </div>
@@ -113,7 +113,7 @@ const SetupStep: React.FC = () => {
                 }`}
                 onClick={() => handleSelectPracticalFocus(focus)}
               >
-                <div className="text-xl font-medium">{focus}</div>
+                {focus}
               </div>
             ))}
           </div>
@@ -133,7 +133,7 @@ const SetupStep: React.FC = () => {
                 }`}
                 onClick={() => handleToggleAcademicFocus(focus)}
               >
-                <div className="text-xl font-medium">{focus}</div>
+                {focus}
               </div>
             ))}
           </div>

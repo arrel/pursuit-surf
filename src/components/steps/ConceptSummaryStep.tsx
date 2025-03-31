@@ -27,7 +27,7 @@ const ConceptSummaryStep: React.FC = () => {
   if (state.isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full py-20">
-        <div className="animate-pulse text-2xl text-primer-purple font-semibold mb-8">
+        <div className="animate-pulse text-2xl text-primer-purple mb-8">
           Thinking...
         </div>
         <svg
@@ -57,10 +57,8 @@ const ConceptSummaryStep: React.FC = () => {
 
   if (!currentVersion) {
     return (
-      <div className="flex flex-col h-full py-20">
-        <div className="text-2xl text-primer-purple-light font-semibold mb-4">
-          No concept summary available
-        </div>
+      <div className="py-20">
+        <div className="text-2xl mb-4">No concept summary available</div>
         <button
           className="button-secondary mt-4"
           onClick={() => router.push("/step/1")}
@@ -148,7 +146,7 @@ const ConceptSummaryStep: React.FC = () => {
       <div className="space-y-10">
         <div>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold">Pursuit Concept</h2>
+            <h2 className="text-2xl">Pursuit Concept</h2>
             {versions.length > 1 && (
               <div className="flex flex-wrap justify-end gap-1">
                 {versions.map((version, index) => (
@@ -172,47 +170,15 @@ const ConceptSummaryStep: React.FC = () => {
             <ReactMarkdown>{currentVersion.conceptSummary}</ReactMarkdown>
           </div>
         </div>
-        {/* {currentVersion.strengths && (
-          <div className="bg-primer-gray-light p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Strengths</h2>
-            <div className="prose prose-invert max-w-none">
-              <ReactMarkdown>{currentVersion.strengths}</ReactMarkdown>
-            </div>
-          </div>
-        )}
-
-        {currentVersion.areasForImprovement && (
-          <div className="bg-primer-gray-light p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">
-              Areas for Improvement
-            </h2>
-            <div className="prose prose-invert max-w-none">
-              <ReactMarkdown>
-                {currentVersion.areasForImprovement}
-              </ReactMarkdown>
-            </div>
-          </div>
-        )}
-
-        {currentVersion.suggestions && (
-          <div className="bg-primer-gray-light p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Suggestions</h2>
-            <div className="prose prose-invert max-w-none">
-              <ReactMarkdown>{currentVersion.suggestions}</ReactMarkdown>
-            </div>
-          </div>
-        )} */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Feedback Scores</h2>
+          <h2 className="text-2xl mb-4">Feedback Scores</h2>
           <div className="space-y-2">
             {currentVersion.scores.map(renderScoreItem)}
           </div>
         </div>
         {allPerfectScores && (
           <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold text-green-400 mb-4">
-              Perfect Score!
-            </h2>
+            <h2 className="text-2xl text-green-400 mb-4">Perfect Score!</h2>
             <p>
               Your pursuit concept has achieved a perfect score across all
               criteria.
@@ -220,19 +186,50 @@ const ConceptSummaryStep: React.FC = () => {
           </div>
         )}
 
-        {currentVersion.questions && currentVersion.questions.length > 0 ? (
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">
-              Refinement Questions
-            </h2>
+        <div className="bg-primer-gray-light p-6 rounded-lg space-y-6">
+          {currentVersion.strengths && (
+            <div>
+              <h2 className="text-2xl mb-4">Strengths</h2>
+              <div className="prose prose-invert max-w-none">
+                <ReactMarkdown>{currentVersion.strengths}</ReactMarkdown>
+              </div>
+            </div>
+          )}
+
+          {currentVersion.areasForImprovement && (
+            <div>
+              <h2 className="text-2xl mb-4">Areas for Improvement</h2>
+              <div className="prose prose-invert max-w-none">
+                <ReactMarkdown>
+                  {currentVersion.areasForImprovement}
+                </ReactMarkdown>
+              </div>
+            </div>
+          )}
+
+          {currentVersion.suggestions && (
+            <div>
+              <h2 className="text-2xl mb-4">Suggestions</h2>
+              <div className="prose prose-invert max-w-none">
+                <ReactMarkdown>{currentVersion.suggestions}</ReactMarkdown>
+              </div>
+            </div>
+          )}
+
+          {currentVersion.questions && currentVersion.questions.length > 0 ? (
             <div className="space-y-4">
+              <h2 className="text-2xl mb-4">Refinement Questions</h2>
               {currentVersion.questions.map((questionItem, index) => (
                 <div key={index} className="space-y-2">
-                  <label className="block">
-                    {questionItem.criterion}: {questionItem.question}
+                  <label className="block font-semibold">
+                    {questionItem.criterion}
                   </label>
-                  <p className="text-sm mb-2 text-primer-black-light">
-                    {questionItem.reason}
+                  <p>
+                    {questionItem.question}
+                    <br />
+                    <span className="text-sm text-primer-black-light">
+                      {questionItem.reason}
+                    </span>
                   </p>
                   <textarea
                     className="input-field w-full h-24 resize-none"
@@ -290,39 +287,32 @@ const ConceptSummaryStep: React.FC = () => {
                 </motion.button>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold text-green-400 mb-4">
-              {meetsAllCriteria() ? "Perfect Score!" : "Looking Good!"}
-            </h2>
-            <p>
-              {meetsAllCriteria()
-                ? "Your pursuit concept meets all the pursuit criteria excellently!"
-                : "Your pursuit concept is well-developed. You can approve it as is or continue refining."}
-            </p>
-          </div>
-        )}
+          ) : (
+            <div className="bg-green-900/20 border border-green-500 p-6 rounded-lg">
+              <h2 className="text-2xl text-green-400 mb-4">
+                {meetsAllCriteria() ? "Perfect Score!" : "Looking Good!"}
+              </h2>
+              <p>
+                {meetsAllCriteria()
+                  ? "Your pursuit concept meets all the pursuit criteria excellently!"
+                  : "Your pursuit concept is well-developed. You can approve it as is or continue refining."}
+              </p>
+            </div>
+          )}
+        </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
           <div className="flex-1 flex flex-col space-y-4">
-            <h3 className="text-xl font-semibold">Ready to continue?</h3>
-            <div className="flex gap-2">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                className="button-secondary"
-                onClick={handlePrevious}
-              >
-                Previous
-              </motion.button>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                className="button flex-grow"
+            <p>
+              Done answering questions?{" "}
+              <a
+                className="text-primer-purple"
+                href="#"
                 onClick={handleApproveAndContinue}
               >
-                Approve & Continue
-              </motion.button>
-            </div>
+                Approve & continue
+              </a>
+            </p>
           </div>
         </div>
       </div>

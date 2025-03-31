@@ -10,11 +10,9 @@ const IntroStep: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-12">
-      <div className="text-center max-w-3xl">
-        <h1 className="text-4xl font-bold text-primer-purple-light mb-8">
-          Welcome to the Pursuit Builder!
-        </h1>
+    <div className="flex flex-col justify-center py-12">
+      <div className="max-w-3xl">
+        <h1 className="text-4xl mb-8">Welcome to the Pursuit Builder!</h1>
         <p className="text-xl mb-12">
           You're about to design an engaging learning experience that helps
           students develop real-world, practical skills they'll use for life.
@@ -23,7 +21,7 @@ const IntroStep: React.FC = () => {
 
       <motion.button
         whileTap={{ scale: 0.95 }}
-        className="button w-full max-w-xs"
+        className="button max-w-xs"
         onClick={handleGetStarted}
       >
         Let's get started

@@ -2,6 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import PursuitProviderWrapper from '@/components/PursuitProviderWrapper'
+import { PromptProvider } from '@/context/PromptContext'
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,10 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} custom-scrollbar`}>
-        <PursuitProviderWrapper>
-          {children}
-        </PursuitProviderWrapper>
+      <body className={`${inter.className} custom-scrollbar flex flex-col min-h-screen`}>
+        <PromptProvider>
+          <PursuitProviderWrapper>
+            <div className="flex-grow">
+              {children}
+            </div>
+            <Footer />
+          </PursuitProviderWrapper>
+        </PromptProvider>
       </body>
     </html>
   )

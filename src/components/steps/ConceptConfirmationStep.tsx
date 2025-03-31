@@ -76,18 +76,13 @@ const ConceptConfirmationStep: React.FC = () => {
 
   if (!state.conceptSummary.initialConcept) {
     return (
-      <div className="flex flex-col items-center justify-center h-full py-20">
-        <div className="text-2xl text-primer-purple-light font-semibold mb-4">
-          No concept summary available
-        </div>
-        <p className="text-gray-300">
-          Please go back and submit your idea first
-        </p>
+      <div className="py-20">
+        <div className="text-2xl mb-4">No concept summary available</div>
         <button
           className="button-secondary mt-4"
-          onClick={() => router.push("/step/2")}
+          onClick={() => router.push("/step/1")}
         >
-          Back to Idea
+          Back to Start
         </button>
       </div>
     );

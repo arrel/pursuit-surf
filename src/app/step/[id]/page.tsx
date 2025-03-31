@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import { usePursuit } from "@/context/PursuitContext";
 import IntroStep from "@/components/steps/IntroStep";
 import SetupStep from "@/components/steps/SetupStep";
 import IdeaStep from "@/components/steps/IdeaStep";
@@ -12,7 +11,6 @@ import CompletionStep from "@/components/steps/CompletionStep";
 
 export default function StepPage() {
   const params = useParams();
-  const { state } = usePursuit();
   const stepId = parseInt(params.id as string);
 
   // Render the appropriate step component
@@ -44,20 +42,11 @@ export default function StepPage() {
         <div className="max-w-4xl mx-auto">
           {showStepIndicators && (
             <div className="mb-8">
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex space-x-2">
-                  {[1, 2, 3, 4, 5].map((step) => (
-                    <div
-                      key={step}
-                      className={`w-3 h-3 rounded-full ${
-                        step <= state.currentStep
-                          ? "bg-primer-purple"
-                          : "bg-primer-black-dark"
-                      }`}
-                    ></div>
-                  ))}
-                </div>
-                <div className="text-sm text-gray-400">Step {stepId} of 5</div>
+              <div className="relative w-full h-2 rounded-full bg-primer-gray-light">
+                <div
+                  style={{ width: `${(stepId / 5) * 100}%` }}
+                  className="absolute h-2 rounded-full bg-primer-purple"
+                ></div>
               </div>
             </div>
           )}
