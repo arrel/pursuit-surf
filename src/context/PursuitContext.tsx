@@ -260,12 +260,15 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
         state.idea.ideaText,
       ].join("\n");
 
+      // Get the current active prompt from localStorage or use the one from context
+      const activePrompt = localStorage.getItem("activePrompt") || prompt;
+
       const response = await fetch("/api/generate-concept", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idea, prompt }),
+        body: JSON.stringify({ idea, prompt: activePrompt }),
       });
 
       if (!response.ok) {
@@ -350,13 +353,16 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
             .join("\n"),
         ].join("\n");
 
+        // Get the current active prompt from localStorage or use the one from context
+        const activePrompt = localStorage.getItem("activePrompt") || prompt;
+
         // Create a prompt with the current summary and the user's answers
         const response = await fetch("/api/generate-concept", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ idea, prompt }),
+          body: JSON.stringify({ idea, prompt: activePrompt }),
         });
 
         if (!response.ok) {
@@ -401,10 +407,13 @@ export function PursuitProvider({ children }: { children: ReactNode }) {
           summary,
         ].join("\n");
 
+        // Get the current active prompt from localStorage or use the one from context
+        const activePrompt = localStorage.getItem("activePrompt") || prompt;
+
         const response = await fetch("/api/generate-concept", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ idea, prompt }),
+          body: JSON.stringify({ idea, prompt: activePrompt }),
         });
 
         if (!response.ok) {
